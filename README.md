@@ -3,7 +3,7 @@
 Iyoutu is an extremely and limited wrapper around https://github.com/rg3/youtube-dl, allowing to interactively choose (in a terminal) which format to download.
 
 Copyright 2019, Felix Wolfsteller
-Released under the GPL (see LICENSE file).
+Released under the GPLv3 or any later version (see LICENSE file).
 
 ## Installation
 
