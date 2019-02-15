@@ -25,7 +25,7 @@ Or install it yourself as:
 
 Call as
 
-  iyoutu URL
+    iyoutu URL
 
 where URL is the path to a source from which to download (possible sources are documented [in the youtube-dl documentation](http://rg3.github.io/youtube-dl/supportedsites.html)).
 
@@ -33,15 +33,15 @@ Make sure that you already have youtube-dl somewhere on your PATH and that you k
 
 Example:
 
-  ➜  $ ✗ iyoutu https://www.youtube.com/watch\?v\=anyvideoid
-  Select format (audio and video combined) 
-    3gp/176x144    small   38k , mp4v.20.3, mp4a.40.2@ 24k (22050Hz), 24.08MiB
-    3gp/320x180    small   95k , mp4v.20.3, mp4a.40.2 (22050Hz), 58.90MiB
-  ‣ webm/640x360    medium , vp8.0, vorbis@128k, 92.47MiB
-    mp4/640x360    medium  200k , avc1.42001E, mp4a.40.2@ 96k (44100Hz), 123.99MiB
-    mp4/1280x720   hd720  176k , avc1.64001F, mp4a.40.2@192k (44100Hz) (best)
-    -> Download audio and video seperately
-    ! Abort
+    ➜  $ ✗ iyoutu https://www.youtube.com/watch\?v\=anyvideoid
+    Select format (audio and video combined) 
+      3gp/176x144    small   38k , mp4v.20.3, mp4a.40.2@ 24k (22050Hz), 24.08MiB
+      3gp/320x180    small   95k , mp4v.20.3, mp4a.40.2 (22050Hz), 58.90MiB
+    ‣ webm/640x360    medium , vp8.0, vorbis@128k, 92.47MiB
+      mp4/640x360    medium  200k , avc1.42001E, mp4a.40.2@ 96k (44100Hz), 123.99MiB
+      mp4/1280x720   hd720  176k , avc1.64001F, mp4a.40.2@192k (44100Hz) (best)
+      -> Download audio and video seperately
+      ! Abort
 
 ## Development
 
