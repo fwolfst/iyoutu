@@ -12,6 +12,8 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Interactive wrapper around youtube-dl}
   spec.description   = %q{Wrapper around youtube-dl, lets you choose formats}
   spec.homepage      = "https://github.com/fwolfst/iyoutu"
+  spec.licenses      = ['GPL-3.0+']
+
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
