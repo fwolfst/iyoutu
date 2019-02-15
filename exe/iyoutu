@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require "iyoutu"
+require 'tty-prompt'
+
+#require 'clipboard'
+#puts "Clipboard content: #{Clipboard.paste}"
+
+if ARGV.length != 1
+  STDERR.puts "Need an argument (URL to fetch)"
+  exit 1
+end
+
+video_url = ARGV[0]
+
+youtube_dl_path = "youtube-dl"
+
+formats_out = %x{#{youtube_dl_path} -F #{video_url}}
+formats = Iyoutu::YoutubeDLFormats.new(formats_out)
+choices = formats.video_with_audio.map do |format|
+  {
+    name:  "#{format.extension}/#{format.resolution_note}",
+    value: format.format_code
+  }
+end
+choices << {
+  name: "-> Download audio and video seperately",
+  value: :separate
+}
+choices << Iyoutu::ABORT_CHOICE
+
+prompt = TTY::Prompt.new
+choice = prompt.select("Select format (audio and video combined)",
+                        choices,
+                        echo: false,
+                        filter: true,
+                        per_page: choices.length)
+
+if choice == :abort
+  exit 0
+elsif choice == :separate
+  video_choice = Iyoutu::user_choose_format(prompt,
+                                            "Video format",
+                                            formats.video_only)
+  exit 0 if video_choice == :abort
+
+  audio_choice = Iyoutu::user_choose_format(prompt,
+                                            "Audio format",
+                                            formats.audio_only)
+  exit 0 if audio_choice == :abort
+
+  exec "#{youtube_dl_path} -f #{video_choice}+#{audio_choice} #{video_url}"
+else
+  exec "#{youtube_dl_path} -f #{choice} #{video_url}"
+end
+
+exit 0
