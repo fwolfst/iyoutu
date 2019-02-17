@@ -28,7 +28,7 @@ module Iyoutu
     end
 
     def parse_format_line(line)
-      format_line_regexp = /^(?<format_code>\d+) +(?<extension>[[:alnum:]]+) +(?<resolution_note>.*)$/
+      format_line_regexp = /^(?<format_code>[^ ]+) +(?<extension>[[:alnum:]]+) +(?<resolution_note>.*)$/
       matches = format_line_regexp.match(line)
       Format.new(matches[:format_code], matches[:extension], matches[:resolution_note])
     end

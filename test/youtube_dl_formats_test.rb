@@ -31,11 +31,45 @@ class YoutubeDLFormatsTest < Minitest::Test
     22           mp4        1280x720   hd720 1132k , avc1.64001F, mp4a.40.2@192k (44100Hz) (best)
   HEREDOC
 
+  YOUTUBE_DL_F_OUTPUT_2 = <<~HEREDOC
+    [ARD] other-video: Downloading XML
+    [info] Available formats for 102:
+    format code                 extension  resolution note
+    5.2.7.12.1_HDS_VoD_Web-L-0  f4m        unknown    (unsupported) , H.264
+    5.2.7.12.1_HDS_VoD_Web-L-1  f4m        unknown    (unsupported) , H.264
+    5.2.13.12.1_Web_L-0         m3u8       unknown    H.264
+    5.2.13.12.1_Web_L-1         m3u8       unknown    H.264
+    5.2.13.14.1_Web_XL-0        m3u8       unknown    H.264
+    5.2.13.14.1_Web_XL-1        m3u8       unknown    H.264
+    1.2.3.6.1_Prog_320x180-0    mp4        320x180     184k , H.264@ 128k, audio@ 56k
+    1.2.3.6.1_Prog_320x180-1    mp4        320x180     184k , H.264@ 128k, audio@ 56k
+    1.2.3.7.1_Prog_480x270-0    mp4        480x270     320k , H.264@ 256k, audio@ 64k
+    1.2.3.7.1_Prog_480x270-1    mp4        480x270     320k , H.264@ 256k, audio@ 64k
+    1.2.3.9.1_Web_M-0           mp4        512x288     608k , H.264@ 512k, audio@ 96k
+    1.2.3.9.1_Web_M-1           mp4        512x288     608k , H.264@ 512k, audio@ 96k
+    1.2.3.11.1_Web_L-0          mp4        640x360    1216k , H.264@1024k, audio@192k
+    1.2.3.11.1_Web_L-1          mp4        640x360    1216k , H.264@1024k, audio@192k
+    1.2.3.12.2_Web_L-0          mp4        960x540    1992k , H.264@1800k, audio@192k
+    1.2.3.12.2_Web_L-1          mp4        960x540    1992k , H.264@1800k, audio@192k
+    1.2.3.12.3_HbbTV_960x540-0  mp4        960x540    1992k , H.264@1800k, audio@192k
+    1.2.3.12.3_HbbTV_960x540-1  mp4        960x540    1992k , H.264@1800k, audio@192k
+    1.2.3.14.1_Prog_1280x720-0  mp4        1280x720   3776k , H.264@3584k, audio@192k
+    1.2.3.14.1_Prog_1280x720-1  mp4        1280x720   3776k , H.264@3584k, audio@192k (best)
+  HEREDOC
+
+
   def test_it_parses_youtube_dl_format_output
     formats = Iyoutu::YoutubeDLFormats.new(YOUTUBE_DL_F_OUTPUT)
     assert_equal 14, formats.video_only.count
     assert_equal 7,  formats.audio_only.count
     assert_equal 2,  formats.video_with_audio.count
+  end
+
+  def test_it_parses_youtube_dl_xml_format_output
+    formats = Iyoutu::YoutubeDLFormats.new(YOUTUBE_DL_F_OUTPUT_2)
+    assert_equal 0,  formats.video_only.count
+    assert_equal 0,  formats.audio_only.count
+    assert_equal 20, formats.video_with_audio.count
   end
 end
 
