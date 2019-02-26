@@ -3,6 +3,8 @@
 require "iyoutu"
 require 'tty-prompt'
 
+require 'tty-which'
+
 #require 'clipboard'
 #puts "Clipboard content: #{Clipboard.paste}"
 
@@ -11,11 +13,14 @@ if ARGV.length != 1
   exit 1
 end
 
+if !TTY::Which.exist?('youtube-dl')
+  STDERR.puts "'youtube-dl' could not be found. Is it installed and on the PATH?"
+  exit 2
+end
+
 video_url = ARGV[0]
 
-youtube_dl_path = "youtube-dl"
-
-formats_out = %x{#{youtube_dl_path} -F #{video_url}}
+formats_out = %x{youtube-dl -F #{video_url}}
 formats = Iyoutu::YoutubeDLFormats.new(formats_out)
 choices = formats.video_with_audio.map do |format|
   {
@@ -49,9 +54,9 @@ elsif choice == :separate
                                             formats.audio_only)
   exit 0 if audio_choice == :abort
 
-  exec "#{youtube_dl_path} -f #{video_choice}+#{audio_choice} #{video_url}"
+  exec "youtube-dl -f #{video_choice}+#{audio_choice} #{video_url}"
 else
-  exec "#{youtube_dl_path} -f #{choice} #{video_url}"
+  exec "youtube-dl -f #{choice} #{video_url}"
 end
 
 exit 0

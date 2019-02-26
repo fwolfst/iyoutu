@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "tty-prompt"
+  spec.add_dependency "tty-which"
   #spec.add_dependency "clipboard" TODO
 
   spec.add_development_dependency "bundler", "~> 2.0"
