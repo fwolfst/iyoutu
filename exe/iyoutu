@@ -5,17 +5,17 @@ require 'tty-prompt'
 
 require 'tty-which'
 
+if !TTY::Which.exist?('youtube-dl')
+  STDERR.puts "'youtube-dl' could not be found. Is it installed and on the PATH?"
+  exit 2
+end
+
 #require 'clipboard'
 #puts "Clipboard content: #{Clipboard.paste}"
 
 if ARGV.length != 1
   STDERR.puts "Need an argument (URL to fetch)"
   exit 1
-end
-
-if !TTY::Which.exist?('youtube-dl')
-  STDERR.puts "'youtube-dl' could not be found. Is it installed and on the PATH?"
-  exit 2
 end
 
 video_url = ARGV[0]
