@@ -5,20 +5,36 @@ require 'tty-prompt'
 
 require 'tty-which'
 
+# Optional feature: use URL from clipboard
+clipboard_content = nil
+
+begin
+  require 'clipboard'
+  clipboard_content = Clipboard.paste
+rescue LoadError
+  STDERR.puts "(no clipboard support)"
+end
 if !TTY::Which.exist?('youtube-dl')
   STDERR.puts "'youtube-dl' could not be found. Is it installed and on the PATH?"
   exit 2
 end
 
-#require 'clipboard'
-#puts "Clipboard content: #{Clipboard.paste}"
+prompt = TTY::Prompt.new
 
-if ARGV.length != 1
-  STDERR.puts "Need an argument (URL to fetch)"
-  exit 1
+if ARGV.length == 1
+  video_url = ARGV[0]
+elsif clipboard_content
+  puts "Clipboard content detected (#{clipboard_content[0..50]})."
+  if prompt.yes?("Use it as URL?")
+    video_url = clipboard_content
+  end
 end
 
-video_url = ARGV[0]
+if video_url.to_s == ''
+  STDERR.puts "Need an argument (URL to fetch)."
+  STDERR.puts "Or install the clipboard gem and copy the URL."
+  exit 1
+end
 
 formats_out = %x{youtube-dl -F #{video_url}}
 formats = Iyoutu::YoutubeDLFormats.new(formats_out)
@@ -32,9 +48,12 @@ choices << {
   name: "-> Download audio and video seperately",
   value: :separate
 }
+choices << {
+  name: "-> Download audio only",
+  value: :audio_only
+}
 choices << Iyoutu::ABORT_CHOICE
 
-prompt = TTY::Prompt.new
 choice = prompt.select("Select format (audio and video combined)",
                         choices,
                         echo: false,
@@ -55,6 +74,13 @@ elsif choice == :separate
   exit 0 if audio_choice == :abort
 
   exec "youtube-dl -f #{video_choice}+#{audio_choice} #{video_url}"
+elsif choice == :audio_only
+  audio_choice = Iyoutu::user_choose_format(prompt,
+                                            "Audio format",
+                                            formats.audio_only)
+  exit 0 if audio_choice == :abort
+
+  exec "youtube-dl -f #{audio_choice} #{video_url}"
 else
   exec "youtube-dl -f #{choice} #{video_url}"
 end
